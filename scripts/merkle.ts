@@ -37,7 +37,9 @@ async function main() {
   });
 
   const merkleRoot = merkleTree.getHexRoot();
-  console.log("Merkle Root:", merkleRoot);
+  console.log("Merkle root:", merkleRoot);
 }
 
 main();
+
+//Merkle root: 0xdf09421d713e44d31c6bd9639e3c7eebd4d35bdd4282e1f3063ea891a50a4744
