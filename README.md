@@ -34,7 +34,9 @@ Ensure you have the following installed:
    ```
 
 ## Deploying the MerkleAirdrop Contract
+
 The CSV file is found in the assets folder
+
 1. Deploy the MerkleToken contract
    ```
    npx hardhat ignition "./ignition/modules/MerkleToken.ts"
@@ -42,14 +44,16 @@ The CSV file is found in the assets folder
    Use the address of the deployed token in the deploy script for MerkleAirdrop found in /ignition/modules/MerkleAirdrop.ts
 2. Deploy the MerkleAirdrop contract
    ```
-   npx hardhat ignition "./ignition/modules/MerkleAirdrop.ts"
+   npx hardhat ignition ./ignition/modules/MerkleAirdrop.ts
    ```
 
 ## Generate Merkle Proof
+
 The CSV file is found in the assets folder and can be replaced, and path updated in the Merkle.ts file found in scripts folder
-run 
-   ```
-   npx hardhat run "./scripts/Merkle.ts"
-   ```
-   the merkple proof should be in the console
----
+run
+
+```
+npx hardhat run scripts/merkle.ts
+```
+
+## the merkple proof should be in the console
