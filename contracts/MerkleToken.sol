@@ -10,7 +10,7 @@ contract MerkleToken is ERC20("MerkleToken", "MKT") {
 
     constructor () {
         OWNER = msg.sender;
-        _mint(msg.sender, 1000e18);
+        _mint(msg.sender, 2_000_000e18);
     }
 
     function mint(address _account, uint _amount) public {
