@@ -12,15 +12,15 @@ contract MerkleAirdrop{
     error AirdropActive();
     error AirdropExhausted();
 
-    event AirdropClaimed(address indexed account, uint time, uint40 amount);
+    event AirdropClaimed(address indexed account, uint time, uint256 amount);
 
-    address immutable OWNER;
-    IERC20 immutable TOKENADDRESS;
-    bytes32 merkleRoot;
+    address immutable public OWNER;
+    IERC20 immutable public TOKENADDRESS;
+    bytes32 public merkleRoot;
     uint immutable ENDDATE;
 
     mapping(address => bool) claimedAddresses;
-    uint40 balance;
+    uint256 balance;
 
     constructor(address _tokenAddress, bytes32 _merkleRoot, uint _duration) {
         IERC20 tokenAddress = IERC20(_tokenAddress);
@@ -32,8 +32,8 @@ contract MerkleAirdrop{
         balance = 1_000_000;
     }
 
-    function claimAirdrop(address _account, uint40 _amount, bytes32[] memory _merkleProof) external {
-        if(claimedAddresses[_account] == true) {
+    function claimAirdrop(bytes32[] memory _merkleProof) external {
+        if(claimedAddresses[msg.sender] == true) {
             revert UserClaimed();
         }
 
@@ -45,15 +45,17 @@ contract MerkleAirdrop{
             revert AirdropExhausted();
         }
 
-        verifyProof(_merkleProof, _amount, _account);
+        uint256 amount = 1_000e18;
 
-        claimedAddresses[_account] = true;
+        verifyProof(_merkleProof, amount, msg.sender);
 
-        balance = balance - _amount;
+        claimedAddresses[msg.sender] = true;
 
-        TOKENADDRESS.transfer(_account, _amount);
+        balance = balance - amount;
 
-        emit AirdropClaimed(_account, block.timestamp, _amount);
+        TOKENADDRESS.transfer(msg.sender, amount);
+
+        emit AirdropClaimed(msg.sender, block.timestamp, amount);
     }
 
     function verifyProof(bytes32[] memory _proof, uint256 _amount, address _address) private view {
