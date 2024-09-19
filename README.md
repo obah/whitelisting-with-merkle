@@ -12,8 +12,8 @@ MerkleAirdrop implements the process of checking wallet addresses for validity i
 
 The `MerkleAirdrop` contract facilitates a token airdrop using the Merkle Tree proof system to verify eligible participants. The contract distributes a predefined amount of tokens to eligible users who can claim the airdrop, provided they haven't claimed the aidrop already and meet the criteria based on the Merkle proof.
 
-- Deployed address: 0xc270739b50d8ef6bEf63dd566e2393BD45825916
-- [Lisk Sepolia Blockscout verification link](https://sepolia-blockscout.lisk.com/address/0xc270739b50d8ef6bEf63dd566e2393BD45825916#code)
+- Deployed address (Lisk Testnet): 0x72cC33dAE4b7433D025Eb34Ff51EbC986a997c56
+- [Lisk Sepolia Blockscout verification link](https://sepolia-blockscout.lisk.com/address/0x72cC33dAE4b7433D025Eb34Ff51EbC986a997c56#code)
 
 Key features:
 
@@ -31,6 +31,13 @@ Functions:
 - `verifyProof(bytes32[] memory _proof, uint256 _amount, address _address)`: Verifies the provided Merkle proof against the stored Merkle root to ensure the claim is valid.
 - `updateMerkleRoot(bytes32 _merkleRoot)`: Allows the owner to update the Merkle root.
 - `withdraw(address _to)`: Allows the owner to withdraw the remaining tokens after the airdrop has ended.
+
+### [MerkleToken.sol](https://github.com/obah/whitelisting-with-merkle/blob/main/contracts/MerkleToken.sol)
+
+This is the ERC20 token powering the airdrop.
+
+- Deployed address (Lisk testnet): 0x7EC98659b285e5071030bF4Fbe2Cf5fE05EEb65D
+- [Lisk Sepolia Blockscout verification link](https://sepolia-blockscout.lisk.com/address/0x7EC98659b285e5071030bF4Fbe2Cf5fE05EEb65D#code)
 
 ## Setup and Installation
 
