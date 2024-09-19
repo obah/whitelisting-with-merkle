@@ -20,7 +20,7 @@ describe("Airdrop", function () {
     );
 
     const merkleRoot =
-      "0xdf09421d713e44d31c6bd9639e3c7eebd4d35bdd4282e1f3063ea891a50a4744";
+      "0x5e604f56fa243f867444fcacb07695a98a6a0ef48174f81e53276e6aaad78364";
     const duration = 360; //5 minutes
     const { token } = await loadFixture(deployMerkleToken);
 

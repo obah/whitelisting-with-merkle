@@ -1,45 +1,39 @@
-import { MerkleTree } from "merkletreejs";
+import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import fs from "fs";
-import keccak256 from "keccak256";
+import csv from "csv-parser";
+import { IProofs, IRow } from "../types";
 
-const hashEntry = (address: string, amount: string): string => {
-  console.log(address);
-  return keccak256(address + amount).toString();
-};
+const values: string[][] = [];
+fs.createReadStream("./assets/accounts.csv")
+  .pipe(csv())
+  .on("data", (row: IRow) => {
+    values.push([row.address, row.amount]);
+  })
+  .on("end", () => {
+    const tree = StandardMerkleTree.of(values, ["address", "uint256"]);
+    console.log("Merkle Root:", tree.root);
 
-function readCSV(filename: string) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filename, "utf8", (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(
-          data
-            .split("\n")
-            .slice(1)
-            .map((line) => line.split(","))
-        );
+    fs.writeFileSync("tree.json", JSON.stringify(tree.dump()));
+
+    const proofs: IProofs = {};
+
+    try {
+      const loadedTree = StandardMerkleTree.load(
+        JSON.parse(fs.readFileSync("tree.json", "utf8"))
+      );
+      for (const [i, v] of loadedTree.entries()) {
+        const proof: string[] = loadedTree.getProof(i);
+        proofs[v[0]] = proof;
       }
-    });
-  });
-}
 
-async function main() {
-  const filePath = "./assets/accounts.csv";
-  const entries: any = await readCSV(filePath);
-
-  const hashedEntries = entries.map((entry: string[]) =>
-    hashEntry(entry[0], entry[1])
-  );
-
-  const merkleTree = new MerkleTree(hashedEntries, keccak256, {
-    sortPairs: true,
+      fs.writeFileSync("proofs.json", JSON.stringify(proofs, null, 2));
+      console.log("All proofs have been saved to 'proofs.json'.");
+    } catch (err) {
+      console.error("Error reading or processing 'tree.json':", err);
+    }
+  })
+  .on("error", (err) => {
+    console.error("Error reading 'airdrop.csv':", err);
   });
 
-  const merkleRoot = merkleTree.getHexRoot();
-  console.log("Merkle root:", merkleRoot);
-}
-
-main();
-
-//Merkle root: 0xdf09421d713e44d31c6bd9639e3c7eebd4d35bdd4282e1f3063ea891a50a4744
+//merkle root: 0x5e604f56fa243f867444fcacb07695a98a6a0ef48174f81e53276e6aaad78364
